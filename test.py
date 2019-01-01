@@ -16,7 +16,7 @@ from networks.dunet import Dunet
 from networks.dinknet import LinkNet34, DinkNet34, DinkNet50, DinkNet101, DinkNet34_less_pool
 
 # BATCHSIZE_PER_CARD = 4
-BATCHSIZE_PER_CARD = 10
+BATCHSIZE_PER_CARD = 8
 
 class TTAFrame():
     def __init__(self, net):
