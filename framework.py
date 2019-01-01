@@ -7,7 +7,7 @@ import numpy as np
 
 class MyFrame():
     def __init__(self, net, loss, lr=2e-4, evalmode = False):
-        self.net = net().cpu()
+        self.net = net()
         self.net = torch.nn.DataParallel(self.net, device_ids=range(torch.cpu.device_count()))
         self.optimizer = torch.optim.Adam(params=self.net.parameters(), lr=lr)
         #self.optimizer = torch.optim.RMSprop(params=self.net.parameters(), lr=lr)
@@ -29,12 +29,12 @@ class MyFrame():
         pred[pred>0.5] = 1
         pred[pred<=0.5] = 0
 
-        mask = pred.squeeze().cpu().data.numpy()
+        mask = pred.squeeze().data.numpy()
         return mask
     
     def test_batch(self):
         self.forward(volatile=True)
-        mask =  self.net.forward(self.img).cpu().data.numpy().squeeze(1)
+        mask =  self.net.forward(self.img).data.numpy().squeeze(1)
         mask[mask>0.5] = 1
         mask[mask<=0.5] = 0
         
@@ -43,18 +43,18 @@ class MyFrame():
     def test_one_img_from_path(self, path):
         img = cv2.imread(path)
         img = np.array(img, np.float32)/255.0 * 3.2 - 1.6
-        img = V(torch.Tensor(img).cpu())
+        img = V(torch.Tensor(img))
         
-        mask = self.net.forward(img).squeeze().cpu().data.numpy()#.squeeze(1)
+        mask = self.net.forward(img).squeeze().data.numpy()#.squeeze(1)
         mask[mask>0.5] = 1
         mask[mask<=0.5] = 0
         
         return mask
         
     def forward(self, volatile=False):
-        self.img = V(self.img.cpu(), volatile=volatile)
+        self.img = V(self.img, volatile=volatile)
         if self.mask is not None:
-            self.mask = V(self.mask.cpu(), volatile=volatile)
+            self.mask = V(self.mask, volatile=volatile)
         
     def optimize(self):
         self.forward()
