@@ -26,7 +26,7 @@ class TTAFrame():
     def test_one_img_from_path(self, path, evalmode = True):
         if evalmode:
             self.net.eval()
-        batchsize = torch.cpu.device_count() * BATCHSIZE_PER_CARD
+        batchsize = torch.get_num_threads() * BATCHSIZE_PER_CARD
         if batchsize >= 8:
             return self.test_one_img_from_path_1(path)
         elif batchsize >= 4:
