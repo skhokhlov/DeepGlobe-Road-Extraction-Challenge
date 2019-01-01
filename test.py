@@ -133,13 +133,13 @@ class TTAFrame():
         return mask3
 
     def load(self, path):
-        self.net.load_state_dict(torch.load(path))
+        self.net.load_state_dict(torch.load(path, map_location='cpu'))
         
 #source = 'dataset/test/'
 source = 'dataset/valid/'
 val = os.listdir(source)
 solver = TTAFrame(DinkNet34)
-solver.load('weights/log01_dink34.th', map_location='cpu')
+solver.load('weights/log01_dink34.th')
 tic = time()
 target = 'submits/log01_dink34/'
 os.mkdir(target)
