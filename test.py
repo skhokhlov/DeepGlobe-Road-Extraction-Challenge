@@ -21,7 +21,7 @@ BATCHSIZE_PER_CARD = 10
 class TTAFrame():
     def __init__(self, net):
         self.net = net()
-        self.net = torch.nn.DataParallel(self.net, device_ids=range(torch.cpu.device_count()))
+        self.net = torch.nn.DataParallel(self.net, device_ids=range(torch.get_num_threads()))
         
     def test_one_img_from_path(self, path, evalmode = True):
         if evalmode:
