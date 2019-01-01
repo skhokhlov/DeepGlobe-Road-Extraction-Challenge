@@ -139,7 +139,7 @@ class TTAFrame():
 source = 'dataset/valid/'
 val = os.listdir(source)
 solver = TTAFrame(DinkNet34)
-solver.load('weights/log01_dink34.th')
+solver.load('weights/log01_dink34.th', map_location='cpu')
 tic = time()
 target = 'submits/log01_dink34/'
 os.mkdir(target)
