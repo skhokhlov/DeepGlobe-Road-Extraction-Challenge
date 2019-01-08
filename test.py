@@ -15,12 +15,12 @@ from networks.unet import Unet
 from networks.dunet import Dunet
 from networks.dinknet import LinkNet34, DinkNet34, DinkNet50, DinkNet101, DinkNet34_less_pool
 
-BATCHSIZE_PER_CARD = 4
+BATCHSIZE_PER_CARD = 2
 
 class TTAFrame():
     def __init__(self, net):
         self.net = net()
-        self.net = torch.nn.DataParallel(self.net, device_ids=range(torch.get_num_threads()))
+        self.net = torch.nn.DataParallel(self.net, device_ids=list(range(torch.get_num_threads())))
         
     def test_one_img_from_path(self, path, evalmode = True):
         if evalmode:
@@ -144,7 +144,7 @@ target = 'submits/log01_dink34/'
 os.mkdir(target)
 for i,name in enumerate(val):
     if i%10 == 0:
-        print i/10, '    ','%.2f'%(time()-tic)
+        print(i/10, '    ','%.2f'%(time()-tic))
     mask = solver.test_one_img_from_path(source+name)
     mask[mask>4.0] = 255
     mask[mask<=4.0] = 0

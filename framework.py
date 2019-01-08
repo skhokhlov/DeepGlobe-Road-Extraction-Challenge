@@ -8,7 +8,7 @@ import numpy as np
 class MyFrame():
     def __init__(self, net, loss, lr=2e-4, evalmode = False):
         self.net = net()
-        self.net = torch.nn.DataParallel(self.net, device_ids=range(torch.cpu.device_count()))
+        self.net = torch.nn.DataParallel(self.net, device_ids=list(range(torch.get_num_threads())))
         self.optimizer = torch.optim.Adam(params=self.net.parameters(), lr=lr)
         #self.optimizer = torch.optim.RMSprop(params=self.net.parameters(), lr=lr)
         self.loss = loss()
@@ -77,6 +77,6 @@ class MyFrame():
         for param_group in self.optimizer.param_groups:
             param_group['lr'] = new_lr
 
-        print >> mylog, 'update learning rate: %f -> %f' % (self.old_lr, new_lr)
-        print 'update learning rate: %f -> %f' % (self.old_lr, new_lr)
+        print('update learning rate: %f -> %f' % (self.old_lr, new_lr), file=mylog)
+        print('update learning rate: %f -> %f' % (self.old_lr, new_lr))
         self.old_lr = new_lr
